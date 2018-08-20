@@ -1,6 +1,6 @@
-//带头双向循环链表
+#pragma once
 #include <iostream>
-using namespace std;
+//带头双向循环链表
 template<typename T>
 struct ListNode {
 	ListNode<T>* _pNext;
@@ -84,6 +84,7 @@ public:
 			pCur = pCur->_pNext;
 		}
 	}
+
 	List<T>& operator=(const List<T>& list)
 	{
 		if (&list != this) {
@@ -206,10 +207,10 @@ public:
 		}
 		return pCur == _pHead ? NULL : pCur;
 	}
-	ListNode<T>* Begin() {
+	ListIterator<T, T&, T*> Begin() {
 		return _pHead->_pNext;
 	}
-	ListNode<T>* End() {
+	ListIterator<T, T&, T*> End() {
 		return _pHead;
 	}
 private:
@@ -222,7 +223,7 @@ private:
 	ListNode<T>* _pHead;
 };
 
-void TestLList()
+static void TestLList()
 {
 	List<int> list;
 	int arr[] = { 1,2,3,4 };
@@ -239,6 +240,6 @@ void TestLList()
 	listThi.Erase(listThi.Find(2));
 	ListIterator<int, int&, int*> it;
 	for (it = listThi.Begin(); it != listThi.End(); ++it) {
-		cout << *it << endl;
+		std::cout << *it << std::endl;
 	}
 }

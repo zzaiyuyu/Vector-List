@@ -1,3 +1,8 @@
+#pragma once
+#include <iostream>
+#include <assert.h>
+#include "String.h"
+
 /*类型萃取，判断当前对象是否是自定义类型*/
 /*原理：利用编译器，在编译期间判断T的类型，若在特化列表里优先使用特化的模板类*/
 struct TrueType {
@@ -27,16 +32,14 @@ struct TypeTraits<double> {
 	typedef TrueType PODTYPE;
 };
 
-/***************************************************/
+/**********************vector*****************************/
 
-#define _CRT_SECURE_NO_WARNINGS 1
-#include <iostream>
-#include <assert.h>
-#include "string.h"
-using namespace std;
+
 template<class T>
 class Vector {
 public:
+	static void TestVector();
+	//连续空间，指针完全胜任迭代器
 	typedef T* Iterator;
 	Vector() 
 		:_start(0),_finish(0),_end(0)
@@ -225,10 +228,9 @@ private:
 	}
 
 private:
-
-	T* _start;	//动态开辟空间起始
-	T* _finish;	//当前未放元素的起始空间
-	T* _end;	//动态开辟空间末尾
+	Iterator _start;	//动态开辟空间起始
+	Iterator _finish;	//当前未放元素的起始空间
+	Iterator _end;	//动态开辟空间末尾static void TestVector()
 };
 
 //凡是需要用T的地方都需要加上template说明T
@@ -264,7 +266,7 @@ template<class T>
 void Vector<T>::Erase(size_t pos)
 {
 	size_t end = Size();
-	--pos;
+	--pos;//位次转为下标
 	while (pos < end) {
 		_start[pos] = _start[pos + 1];
 		pos++;
@@ -272,31 +274,33 @@ void Vector<T>::Erase(size_t pos)
 	--_finish;
 }
 
-void TestVector()
+
+template<typename T>
+void Vector<T>::TestVector()
 {
 	Vector<double> vi(5, 3.14);
 	vi.PushBack(1.5);
 	vi.PushBack(2.5);
 	vi.PushBack(3.33);
-	cout << vi.Size() << endl;
-	cout << vi.Capacity() << endl;
-	cout << vi.Front() << endl;
-	cout << vi.Back() << endl;
+	std::cout << vi.Size() << std::endl;
+	std::cout << vi.Capacity() << std::endl;
+	std::cout << vi.Front() << std::endl;
+	std::cout << vi.Back() << std::endl;
 	vi.PopBack();
 	vi.PopBack();
-	cout << vi.Size() << endl;
-	cout << vi.Capacity() << endl;
-	cout << vi.Front() << endl;
-	cout << vi.Back() << endl;
+	std::cout << vi.Size() << std::endl;
+	std::cout << vi.Capacity() << std::endl;
+	std::cout << vi.Front() << std::endl;
+	std::cout << vi.Back() << std::endl;
 	vi.Resize(20, 9);
-	cout << endl;
+	std::cout << std::endl;
 	for (size_t i = 0; i < vi.Size(); i++) {
-		cout << vi[i] << " ";
+		std::cout << vi[i] << " ";
 	}
-	cout << endl;
+	std::cout << std::endl;
 	Vector<double> vb(vi);
 	for (size_t i = 0; i < vb.Size(); i++) {
-		cout << vb[i] << " ";
+		std::cout << vb[i] << " ";
 	}
 	Vector<String> vs(10, "Nice");
 	vs.PushBack("l1");
@@ -306,12 +310,6 @@ void TestVector()
 	vs.PopBack();
 	Vector<String>::Iterator it;
 	for (it = vs.Begin(); it != vs.End(); it++) {
-		cout << *it << endl;
+		std::cout << *it << std::endl;
 	}
-}
-void TestLList();
-int main()
-{
-	//TestVector();
-	TestLList();
 }
